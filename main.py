@@ -102,11 +102,15 @@ from keras.api.models import load_model
 # history = model.fit(train_generator, epochs=10, batch_size=10, callbacks=[early_stopping])
 # model.save("Raw_Model.keras")
 
-model=load_model("Raw_Model.keras")
+model1=load_model("my_model1.keras")
+model2=load_model("Raw_Model.keras")
 
-predictions = model.predict(test_generator)
-predicted_prices = scaler_y.inverse_transform(predictions)
-rmse, r2, mae = evaluate_model_performance(y_test[50:], predicted_prices)
+predictions1 = model1.predict(test_generator)
+predictions2 = model2.predict(test_generator)
+predicted_prices1 = scaler_y.inverse_transform(predictions1)
+predicted_prices2 = scaler_y.inverse_transform(predictions2)
+rmse1, r21, mae1 = evaluate_model_performance(y_test[50:], predicted_prices1)
+rmse2, r22, mae2 = evaluate_model_performance(y_test[50:], predicted_prices2)
 
 
 
@@ -120,8 +124,8 @@ def prepare_combined_chart_data(y_true, y_pred):
     return data
 
 # Prepare combined data for the chart
-combined_chart_data = prepare_combined_chart_data(y_test[50:].values, predicted_prices)
-
+combined_chart_data1 = prepare_combined_chart_data(y_test[50:].values, predicted_prices1)
+combined_chart_data2 = prepare_combined_chart_data(y_test[50:].values, predicted_prices2)
 
 page = """
 <|text-center|
@@ -131,14 +135,24 @@ page = """
 
 <h5> It is a kaggle competition and the code is pushed on GitHub repository.</h5>
 
-<|{combined_chart_data}|chart|type=line|x=Index|y[1]=Actual|y[2]=Predicted|title=Actual vs Predicted Closing Prices|>
+<|{combined_chart_data1}|chart|type=line|x=Index|y[1]=Actual|y[2]=Predicted|title=Actual vs Predicted Closing Prices|>
+
+<h5> The following are the metrics of the model, this one is not optimized or fine-tuned by optuna : </h5>
+
+<|layout|columns = 1 1 1 1|
+# MAE : <|metric|value={mae1:.2f}|>
+# RMSE : <|metric|value={rmse1:.2f}|>
+# R² : <|metric|value={r21:.2f}|>
+|>
+
+<|{combined_chart_data2}|chart|type=line|x=Index|y[1]=Actual|y[2]=Predicted|title=Actual vs Predicted Closing Prices|>
 
 <h5> The following are the metrics of the model, this one is optimized or fine-tuned by optuna : </h5>
 
 <|layout|columns = 1 1 1 1|
-# MAE : <|metric|value={mae:.2f}|>
-# RMSE : <|metric|value={rmse:.2f}|>
-# R² : <|metric|value={r2:.2f}|>
+# MAE : <|metric|value={mae2:.2f}|>
+# RMSE : <|metric|value={rmse2:.2f}|>
+# R² : <|metric|value={r22:.2f}|>
 |>
 """
 
