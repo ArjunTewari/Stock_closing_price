@@ -133,7 +133,7 @@ page = """
 
 <|{combined_chart_data}|chart|type=line|x=Index|y[1]=Actual|y[2]=Predicted|title=Actual vs Predicted Closing Prices|>
 
-<h5> The following are the metrics of the model, this one is not optimized or fine-tuned by optuna : </h5>
+<h5> The following are the metrics of the model, this one is optimized or fine-tuned by optuna : </h5>
 
 <|layout|columns = 1 1 1 1|
 # MAE : <|metric|value={mae:.2f}|>
