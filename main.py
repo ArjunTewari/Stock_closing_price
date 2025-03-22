@@ -144,5 +144,5 @@ page = """
 
 app = Gui(page)
 if __name__ == "__main__":
-    app.run(title="Taipy Lightsail App", host="0.0.0.0", port=5005)
+    app.run(title="Bi-LSTM", host="0.0.0.0", port=5001)
 
